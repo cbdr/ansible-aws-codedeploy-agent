@@ -11,9 +11,7 @@
 - name: "Install Packages | pip"
   pip:
     state: present
-    name: "{{ item }}"
-  with_items:
-    - awscli
+    name: ['awscli']
   tags:
     - codedeploy
 
@@ -26,7 +24,7 @@
   get_url:
     url: "https://aws-codedeploy-{{ ansible_ec2_placement_region }}.s3.amazonaws.com/latest/install"
     dest: /usr/local/sbin/codedeploy-install
-  when: is_codedeploy_installed|failed
+  when: is_codedeploy_installed is failed
   tags:
     - codedeploy
 
@@ -37,13 +35,13 @@
     group: root
     owner: root
     mode: 0755
-  when: is_codedeploy_installed|failed
+  when: is_codedeploy_installed is failed
   tags:
     - codedeploy
 
 - name: "Codedeploy Install"
   become: true
   command: /usr/local/sbin/codedeploy-install auto
-  when: is_codedeploy_installed|failed
+  when: is_codedeploy_installed is failed
   tags:
     - codedeploy
