@@ -25,7 +25,7 @@
 - name: "Get CodeDeploy | s3"
   get_url:
     url: "https://aws-codedeploy-{{ ansible_ec2_placement_region }}.s3.amazonaws.com/latest/install"
-    dest: /tmp/codedeploy-install
+    dest: /usr/local/sbin/codedeploy-install
   when: is_codedeploy_installed|failed
   tags:
     - codedeploy
@@ -33,7 +33,7 @@
 - name: "Codedeploy Install Binary | Permission Executable"
   file:
     state: file
-    path: /tmp/codedeploy-install
+    path: /usr/local/sbin/codedeploy-install
     group: root
     owner: root
     mode: 0755
@@ -43,7 +43,7 @@
 
 - name: "Codedeploy Install"
   become: true
-  command: /tmp/codedeploy-install auto
+  command: /usr/local/sbin/codedeploy-install auto
   when: is_codedeploy_installed|failed
   tags:
     - codedeploy
