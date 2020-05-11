@@ -1,4 +1,11 @@
 ---
+- name: Install awscli
+  yum:
+    name: awscli
+    state: latest
+  tags:
+    - codedeploy
+
 - name: "Ensure the epel repo is installed"
   package:
     name: epel-release

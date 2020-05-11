@@ -1,26 +1,19 @@
 ---
-- name: "Load variables specific to this OS"
-  include_vars: "{{ ansible_os_family }}.yml"
+- name: Load variables specific to this OS
+  include_vars: "{{ ansible_os_family | lower }}.yml"
   tags:
     - codedeploy
 
-- include: "{{ ansible_os_family }}.yml"
+- include: "{{ ansible_os_family | lower }}.yml"
   tags:
     - codedeploy
 
-- name: "Install Packages | pip"
-  pip:
-    state: present
-    name: ['awscli']
-  tags:
-    - codedeploy
-
-- name: "Get Instance Metadata | ec2"
+- name: Get Instance Metadata | ec2
   action: ec2_metadata_facts
   tags:
     - codedeploy
 
-- name: "Get CodeDeploy | s3"
+- name: Get CodeDeploy | s3
   get_url:
     url: "https://aws-codedeploy-{{ ansible_ec2_placement_region }}.s3.amazonaws.com/latest/install"
     dest: /usr/local/sbin/codedeploy-install
@@ -28,7 +21,7 @@
   tags:
     - codedeploy
 
-- name: "Codedeploy Install Binary | Permission Executable"
+- name: Codedeploy Install Binary | Permission Executable
   file:
     state: file
     path: /usr/local/sbin/codedeploy-install
@@ -39,7 +32,7 @@
   tags:
     - codedeploy
 
-- name: "Codedeploy Install"
+- name: Codedeploy Install
   become: true
   command: /usr/local/sbin/codedeploy-install auto
   when: is_codedeploy_installed is failed

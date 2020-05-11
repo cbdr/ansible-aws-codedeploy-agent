@@ -1,4 +1,11 @@
 ---
+- name: Install awscli
+  apt:
+    name: awscli
+    state: latest
+  tags:
+    - codedeploy
+
 - name: "Install Packages | package manager"
   package:
     state: latest
